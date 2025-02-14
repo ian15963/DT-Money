@@ -1,4 +1,5 @@
 import { Header } from "../../components/Header";
+import { SearchForm } from "../../components/SearchForm";
 import { Summary } from "../../components/Summary";
 import { PriceHighlight, TransactionsContainer, TransactionsTable } from "./styles";
 
@@ -7,8 +8,8 @@ export const Transactions = () => {
     <div>
       <Header/>
       <Summary/>
-      
       <TransactionsContainer>
+        <SearchForm/>
         <TransactionsTable>
           <tbody>
             <tr>
