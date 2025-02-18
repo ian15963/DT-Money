@@ -1,7 +1,7 @@
 import { ArrowCircleDown, ArrowCircleUp, CurrencyDollar } from "phosphor-react";
 import { SummaryCard, SummaryContainer } from "./styles";
 import { useContext, useEffect, useState } from "react";
-import { TransactionContext } from "../../contexts/TransactionsContext";
+import { Transaction, TransactionContext } from "../../contexts/TransactionsContext";
 
 interface SummaryInfo{
   totalIncome: number,
@@ -10,20 +10,26 @@ interface SummaryInfo{
 }
 
 export const Summary = () => {
-
   const [summaryInfo, setSummaryInfo] = useState<SummaryInfo>();
   const {transactions} = useContext(TransactionContext)
 
   useEffect(() => {
+    const summary = calculateSummary(transactions)
+    setSummaryInfo(summary)
+  }, [])
+
+  const calculateSummary = (transactions: Transaction[]) => {
+
     const summary = {} as SummaryInfo
     summary['totalIncome'] = transactions?.filter(transaction => transaction.type == 'income')
       ?.map(t => t.price)?.reduce((a, b) => a +b, 0);
     summary['totalOutcome'] = transactions?.filter(transaction => transaction.type == 'outcome')
     ?.map(t => t.price)?.reduce((a, b) => a +b, 0)
-    summary['total'] = summary['totalIncome'] - summary['totalOutcome']
-
-    setSummaryInfo(summary)
-  }, [])
+    
+    const total = summary['totalIncome'] - summary['totalOutcome'];
+    summary['total'] = !isNaN(total) ? total : 0;
+    return summary;
+  }
 
   return(
     <SummaryContainer>
