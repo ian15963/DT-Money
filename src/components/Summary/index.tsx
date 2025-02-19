@@ -10,13 +10,8 @@ interface SummaryInfo{
 }
 
 export const Summary = () => {
-  const [summaryInfo, setSummaryInfo] = useState<SummaryInfo>();
+  let summaryInfo;
   const {transactions} = useContext(TransactionContext)
-
-  useEffect(() => {
-    const summary = calculateSummary(transactions)
-    setSummaryInfo(summary)
-  }, [])
 
   const calculateSummary = (transactions: Transaction[]) => {
 
@@ -30,6 +25,8 @@ export const Summary = () => {
     summary['total'] = !isNaN(total) ? total : 0;
     return summary;
   }
+
+  summaryInfo = calculateSummary(transactions)
 
   return(
     <SummaryContainer>
