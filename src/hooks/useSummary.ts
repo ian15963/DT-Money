@@ -1,5 +1,5 @@
-import { useContext } from "react";
 import { Transaction, TransactionContext } from "../contexts/TransactionsContext";
+import { useContextSelector } from "use-context-selector";
 
 interface SummaryInfo{
   totalIncome: number,
@@ -9,7 +9,11 @@ interface SummaryInfo{
 
 export const useSummary = () => {
 
-  const {transactions} = useContext(TransactionContext)
+  const transactions = useContextSelector(TransactionContext,
+    (context) => {
+      return context.transactions
+    }
+  )
 
   const calculateSummary = (transactions: Transaction[]) => {
     const summary = {} as SummaryInfo
