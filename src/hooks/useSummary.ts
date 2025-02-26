@@ -1,3 +1,4 @@
+import { useCallback, useMemo } from "react";
 import { Transaction, TransactionContext } from "../contexts/TransactionsContext";
 import { useContextSelector } from "use-context-selector";
 
@@ -15,7 +16,7 @@ export const useSummary = () => {
     }
   )
 
-  const calculateSummary = (transactions: Transaction[]) => {
+  const calculateSummary = useCallback((transactions: Transaction[]) => {
     const summary = {} as SummaryInfo
     summary['totalIncome'] = transactions?.filter(transaction => transaction.type == 'income')
       ?.map(t => t.price)?.reduce((a, b) => a +b, 0);
@@ -25,7 +26,11 @@ export const useSummary = () => {
     const total = summary['totalIncome'] - summary['totalOutcome'];
     summary['total'] = !isNaN(total) ? total : 0;
     return summary;
-  }
+  }, [])
 
-  return calculateSummary(transactions)
+  const summaryInfo = useMemo(() => {
+    return calculateSummary(transactions)
+  }, transactions)
+
+  return summaryInfo
 }
